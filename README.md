@@ -1,3 +1,6 @@
+[<img src="https://androidweekly.net/issues/issue-611/badge">](https://androidweekly.net/issues/issue-611)
+
+
 ### An example of [ContainerTransform](https://m3.material.io/styles/motion/transitions/transition-patterns#b67cba74-6240-4663-a423-d537b6d21187) style animation with Jetpack Compose
 
 
