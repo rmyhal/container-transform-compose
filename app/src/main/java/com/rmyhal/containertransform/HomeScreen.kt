@@ -55,123 +55,123 @@ import me.rmyhal.contentment.Contentment
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
-	Box(
-		modifier = modifier
-			.fillMaxSize(),
-	) {
-		HotContent()
-		FabContainer(
-			modifier = Modifier
-				.align(Alignment.BottomEnd)
-		)
-	}
+  Box(
+    modifier = modifier
+      .fillMaxSize(),
+  ) {
+    HotContent()
+    FabContainer(
+      modifier = Modifier
+        .align(Alignment.BottomEnd)
+    )
+  }
 }
 
 @Composable
 private fun FabContainer(
-	modifier: Modifier = Modifier,
+  modifier: Modifier = Modifier,
 ) {
-	var containerState by remember { mutableStateOf(ContainerState.Fab) }
-	val transition = updateTransition(containerState, label = "container transform")
-	val animatedColor by transition.animateColor(
-		label = "color",
-	) { state ->
-		when (state) {
-			ContainerState.Fab -> MaterialTheme.colorScheme.primaryContainer
-			ContainerState.Fullscreen -> MaterialTheme.colorScheme.surface
-		}
-	}
+  var containerState by remember { mutableStateOf(ContainerState.Fab) }
+  val transition = updateTransition(containerState, label = "container transform")
+  val animatedColor by transition.animateColor(
+    label = "color",
+  ) { state ->
+    when (state) {
+      ContainerState.Fab -> MaterialTheme.colorScheme.primaryContainer
+      ContainerState.Fullscreen -> MaterialTheme.colorScheme.surface
+    }
+  }
 
-	val cornerRadius by transition.animateDp(
-		label = "corner radius",
-		transitionSpec = {
-			when (targetState) {
-				ContainerState.Fab -> tween(
-					durationMillis = 400,
-					easing = EaseOutCubic,
-				)
+  val cornerRadius by transition.animateDp(
+    label = "corner radius",
+    transitionSpec = {
+      when (targetState) {
+        ContainerState.Fab -> tween(
+          durationMillis = 400,
+          easing = EaseOutCubic,
+        )
 
-				ContainerState.Fullscreen -> tween(
-					durationMillis = 200,
-					easing = EaseInCubic,
-				)
-			}
-		}
-	) { state ->
-		when (state) {
-			ContainerState.Fab -> 22.dp
-			ContainerState.Fullscreen -> 0.dp
-		}
-	}
-	val elevation by transition.animateDp(
-		label = "elevation",
-		transitionSpec = {
-			when (targetState) {
-				ContainerState.Fab -> tween(
-					durationMillis = 400,
-					easing = EaseOutCubic,
-				)
+        ContainerState.Fullscreen -> tween(
+          durationMillis = 200,
+          easing = EaseInCubic,
+        )
+      }
+    }
+  ) { state ->
+    when (state) {
+      ContainerState.Fab -> 22.dp
+      ContainerState.Fullscreen -> 0.dp
+    }
+  }
+  val elevation by transition.animateDp(
+    label = "elevation",
+    transitionSpec = {
+      when (targetState) {
+        ContainerState.Fab -> tween(
+          durationMillis = 400,
+          easing = EaseOutCubic,
+        )
 
-				ContainerState.Fullscreen -> tween(
-					durationMillis = 200,
-					easing = EaseOutCubic,
-				)
-			}
-		}
-	) { state ->
-		when (state) {
-			ContainerState.Fab -> 6.dp
-			ContainerState.Fullscreen -> 0.dp
-		}
-	}
-	val padding by transition.animateDp(
-		label = "padding",
-	) { state ->
-		when (state) {
-			ContainerState.Fab -> 16.dp
-			ContainerState.Fullscreen -> 0.dp
-		}
-	}
+        ContainerState.Fullscreen -> tween(
+          durationMillis = 200,
+          easing = EaseOutCubic,
+        )
+      }
+    }
+  ) { state ->
+    when (state) {
+      ContainerState.Fab -> 6.dp
+      ContainerState.Fullscreen -> 0.dp
+    }
+  }
+  val padding by transition.animateDp(
+    label = "padding",
+  ) { state ->
+    when (state) {
+      ContainerState.Fab -> 16.dp
+      ContainerState.Fullscreen -> 0.dp
+    }
+  }
 
-	transition.AnimatedContent(
-		contentAlignment = Alignment.Center,
-		modifier = modifier
+  transition.AnimatedContent(
+    contentAlignment = Alignment.Center,
+    modifier = modifier
 			.padding(end = padding, bottom = padding)
 			.shadow(
 				elevation = elevation,
 				shape = RoundedCornerShape(cornerRadius)
 			)
 			.drawBehind { drawRect(animatedColor) },
-		transitionSpec = {
-			(
-				fadeIn(animationSpec = tween(220, delayMillis = 90)) +
-					scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90))
-				)
-				.togetherWith(fadeOut(animationSpec = tween(90)))
-				.using(SizeTransform(clip = false, sizeAnimationSpec = { _, _ ->
-					tween(
-						durationMillis = 500,
-						easing = FastOutSlowInEasing
-					)
-				}))
-		}
-	) { state ->
-		when (state) {
-			ContainerState.Fab -> {
-				Fab(
-					modifier = Modifier,
-					onClick = { containerState = ContainerState.Fullscreen }
-				)
-			}
+    transitionSpec = {
+      (
+        fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+          scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90))
+        )
+        .togetherWith(fadeOut(animationSpec = tween(90)))
+        .using(SizeTransform(clip = false, sizeAnimationSpec = { _, _ ->
+          tween(
+            durationMillis = 500,
+            easing = FastOutSlowInEasing
+          )
+        }))
+    }
+  ) { state ->
+    when (state) {
+      ContainerState.Fab -> {
+        Fab(
+          modifier = Modifier,
+          onClick = { containerState = ContainerState.Fullscreen }
+        )
+      }
 
-			ContainerState.Fullscreen -> {
-				AddContentScreen(
-					modifier = Modifier,
-					onBack = { containerState = ContainerState.Fab }
-				)
-			}
-		}
-	}
+      ContainerState.Fullscreen -> {
+        AddContentScreen(
+          modifier = Modifier,
+          onBack = { containerState = ContainerState.Fab }
+        )
+      }
+    }
+  }
 }
 
 @Composable
@@ -179,13 +179,13 @@ private fun HotContent() {
   Column {
     SearchBar(
       modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 12.dp, vertical = 6.dp)
+				.fillMaxWidth()
+				.padding(horizontal = 12.dp, vertical = 6.dp)
     )
 
     var uiState by remember { mutableStateOf<UiState>(UiState.Loading) }
     LaunchedEffect(Unit) {
-			// fake loading
+      // fake loading
       delay(600)
       uiState = UiState.Loaded(hotTakes)
     }
@@ -209,78 +209,78 @@ private fun HotContent() {
 
 @Composable
 private fun SearchBar(modifier: Modifier = Modifier) {
-	OutlinedTextField(
-		modifier = modifier,
-		value = "",
-		onValueChange = {},
-		leadingIcon = {
-			Icon(
-				imageVector = Icons.Default.Menu,
-				contentDescription = null,
-			)
-		},
-		placeholder = {
-			Text(
-				text = "Search your hot takes"
-			)
-		},
-		colors = OutlinedTextFieldDefaults.colors(
-			focusedBorderColor = Color.Transparent,
-			unfocusedBorderColor = Color.Transparent,
-			unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-			focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-		),
-		shape = RoundedCornerShape(50)
-	)
+  OutlinedTextField(
+    modifier = modifier,
+    value = "",
+    onValueChange = {},
+    leadingIcon = {
+      Icon(
+        imageVector = Icons.Default.Menu,
+        contentDescription = null,
+      )
+    },
+    placeholder = {
+      Text(
+        text = "Search your hot takes"
+      )
+    },
+    colors = OutlinedTextFieldDefaults.colors(
+      focusedBorderColor = Color.Transparent,
+      unfocusedBorderColor = Color.Transparent,
+      unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+      focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+    ),
+    shape = RoundedCornerShape(50)
+  )
 }
 
 @Composable
 private fun HotTakes() {
-	LazyColumn(
-		modifier = Modifier
+  LazyColumn(
+    modifier = Modifier
 			.fillMaxWidth()
 			.padding(top = 12.dp),
-		verticalArrangement = Arrangement.spacedBy(12.dp)
-	) {
-		items(hotTakes) { HotTake(hotTake = it) }
-	}
+    verticalArrangement = Arrangement.spacedBy(12.dp)
+  ) {
+    items(hotTakes) { HotTake(hotTake = it) }
+  }
 }
 
 @Composable
 private fun HotTake(hotTake: HotTake) {
-	Card(
-		modifier = Modifier
+  Card(
+    modifier = Modifier
 			.fillMaxWidth()
 			.padding(horizontal = 16.dp),
-		onClick = { },
-	) {
-		Column(
-			modifier = Modifier.padding(16.dp)
-		) {
-			hotTake.title?.let {
-				Text(
-					text = hotTake.title,
-					style = MaterialTheme.typography.titleMedium,
-				)
-			}
-			Text(
-				modifier = Modifier
-					.padding(top = 6.dp),
-				maxLines = 3,
-				text = hotTake.take,
-				overflow = TextOverflow.Ellipsis
-			)
-		}
-	}
+    onClick = { },
+  ) {
+    Column(
+      modifier = Modifier.padding(16.dp)
+    ) {
+      hotTake.title?.let {
+        Text(
+          text = hotTake.title,
+          style = MaterialTheme.typography.titleMedium,
+        )
+      }
+      Text(
+        modifier = Modifier
+          .padding(top = 6.dp),
+        maxLines = 3,
+        text = hotTake.take,
+        overflow = TextOverflow.Ellipsis
+      )
+    }
+  }
 }
 
 @Composable
 private fun Fab(
-	modifier: Modifier = Modifier,
-	onClick: () -> Unit
+  modifier: Modifier = Modifier,
+  onClick: () -> Unit
 ) {
-	Box(
-		modifier = modifier
+  Box(
+    modifier = modifier
 			.defaultMinSize(
 				minWidth = 76.dp,
 				minHeight = 76.dp,
@@ -288,13 +288,13 @@ private fun Fab(
 			.clickable(
 				onClick = onClick,
 			),
-		contentAlignment = Alignment.Center,
-	) {
-		Icon(
-			painter = rememberVectorPainter(Icons.Filled.Add),
-			contentDescription = null,
-		)
-	}
+    contentAlignment = Alignment.Center,
+  ) {
+    Icon(
+      painter = rememberVectorPainter(Icons.Filled.Add),
+      contentDescription = null,
+    )
+  }
 }
 
 sealed interface UiState {
@@ -303,14 +303,14 @@ sealed interface UiState {
 }
 
 enum class ContainerState {
-	Fab,
-	Fullscreen,
+  Fab,
+  Fullscreen,
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-	ContainerTransformTheme {
-		HomeScreen()
-	}
+  ContainerTransformTheme {
+    HomeScreen()
+  }
 }
