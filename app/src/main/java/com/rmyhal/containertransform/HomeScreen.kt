@@ -206,15 +206,15 @@ private fun Fab(
   with(sharedTransitionScope) {
     FloatingActionButton(
       modifier = Modifier
-        .padding(16.dp)
-        .defaultMinSize(76.dp, 76.dp)
         .sharedBounds(
           sharedContentState = rememberSharedContentState(key = "bounds"),
           animatedVisibilityScope = animatedVisibilityScope,
           enter = fadeIn(animationSpec = tween(220, easing = FastOutSlowInEasing)),
           exit = fadeOut(animationSpec = tween(220, easing = FastOutSlowInEasing)),
           resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds(),
-        ),
+        )
+        .padding(16.dp)
+        .defaultMinSize(76.dp, 76.dp),
       onClick = onClick,
     ) {
       Icon(Icons.Filled.Add, "Floating action button")

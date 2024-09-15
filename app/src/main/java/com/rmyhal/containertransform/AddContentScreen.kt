@@ -51,7 +51,6 @@ fun AddContentScreen(
 	with(sharedTransitionScope) {
 		Column(
 			modifier = modifier
-				.padding(horizontal = 8.dp)
 				.background(MaterialTheme.colorScheme.surface)
 				.sharedBounds(
 					sharedContentState = rememberSharedContentState(key = "bounds"),
@@ -60,6 +59,7 @@ fun AddContentScreen(
 					exit = fadeOut(animationSpec = tween(220, easing = FastOutSlowInEasing)),
 					resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
 				)
+				.padding(horizontal = 8.dp),
 		) {
 			Toolbar(
 				onBack = onBack,
