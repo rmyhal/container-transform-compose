@@ -1,6 +1,14 @@
 package com.rmyhal.containertransform
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -26,28 +34,39 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.rmyhal.containertransform.ui.theme.ContainerTransformTheme
 import com.rmyhal.containertransform.ui.theme.Gray10
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun AddContentScreen(
 	modifier: Modifier = Modifier,
+	sharedTransitionScope: SharedTransitionScope,
+	animatedVisibilityScope: AnimatedVisibilityScope,
 	onBack: () -> Unit,
 ) {
 	BackHandler {
 		onBack()
 	}
-	Column(
-		modifier = modifier
-			.padding(horizontal = 8.dp)
-	) {
-		Toolbar(
-			onBack = onBack,
-		)
-		TitleInputField()
-		StoryInputField()
+	with(sharedTransitionScope) {
+		Column(
+			modifier = modifier
+				.background(MaterialTheme.colorScheme.surface)
+				.sharedBounds(
+					sharedContentState = rememberSharedContentState(key = "bounds"),
+					animatedVisibilityScope = animatedVisibilityScope,
+					enter = fadeIn(animationSpec = tween(220, easing = FastOutSlowInEasing)),
+					exit = fadeOut(animationSpec = tween(220, easing = FastOutSlowInEasing)),
+					resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
+				)
+				.padding(horizontal = 8.dp),
+		) {
+			Toolbar(
+				onBack = onBack,
+			)
+			TitleInputField()
+			StoryInputField()
+		}
 	}
 }
 
@@ -123,12 +142,4 @@ private fun StoryInputField() {
 			unfocusedBorderColor = Color.Transparent,
 		),
 	)
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun Preview() {
-	ContainerTransformTheme {
-		AddContentScreen {}
-	}
 }
