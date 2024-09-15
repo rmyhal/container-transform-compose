@@ -28,12 +28,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +50,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rmyhal.containertransform.ui.theme.ContainerTransformTheme
+import kotlinx.coroutines.delay
+import me.rmyhal.contentment.Contentment
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
@@ -172,14 +176,35 @@ private fun FabContainer(
 
 @Composable
 private fun HotContent() {
-	Column {
-		SearchBar(
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(horizontal = 12.dp, vertical = 6.dp)
-		)
-		HotTakes()
-	}
+  Column {
+    SearchBar(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 12.dp, vertical = 6.dp)
+    )
+
+    var uiState by remember { mutableStateOf<UiState>(UiState.Loading) }
+    LaunchedEffect(Unit) {
+			// fake loading
+      delay(600)
+      uiState = UiState.Loaded(hotTakes)
+    }
+    Box(
+      modifier = Modifier.fillMaxSize(),
+    ) {
+      Contentment {
+        when (uiState) {
+          is UiState.Loading -> indicator {
+            CircularProgressIndicator(
+              modifier = Modifier.align(Alignment.Center)
+            )
+          }
+
+          is UiState.Loaded -> content { HotTakes() }
+        }
+      }
+    }
+  }
 }
 
 @Composable
@@ -270,6 +295,11 @@ private fun Fab(
 			contentDescription = null,
 		)
 	}
+}
+
+sealed interface UiState {
+  data class Loaded(val list: List<HotTake>) : UiState
+  data object Loading : UiState
 }
 
 enum class ContainerState {
