@@ -1,10 +1,11 @@
 [versions]
-agp = "8.4.0-alpha04"
+agp = "8.5.2"
 kotlin = "1.9.0"
-coreKtx = "1.12.0"
-lifecycleRuntimeKtx = "2.7.0"
-activityCompose = "1.8.2"
-composeBom = "2024.02.00"
+coreKtx = "1.13.1"
+lifecycleRuntimeKtx = "2.8.5"
+activityCompose = "1.9.2"
+composeBom = "2024.09.01"
+composeAnimation = "1.7.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
