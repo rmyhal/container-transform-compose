@@ -49,13 +49,14 @@ import kotlinx.coroutines.delay
 import me.rmyhal.contentment.Contentment
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier, setShowNavBars: (Boolean) -> Unit) {
   Box(
     modifier = modifier
       .fillMaxSize(),
   ) {
     HotContent()
     FabContainer(
+      setShowNavBars = setShowNavBars,
       modifier = Modifier
         .align(Alignment.BottomEnd),
     )
@@ -64,6 +65,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
 @Composable
 private fun FabContainer(
+  setShowNavBars: (Boolean) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   var containerState by remember { mutableStateOf(ContainerState.Fab) }
@@ -78,7 +80,7 @@ private fun FabContainer(
       when (state) {
         ContainerState.Fab -> {
           Fab(
-            onClick = { containerState = ContainerState.Fullscreen },
+            onClick = { containerState = ContainerState.Fullscreen; setShowNavBars(false) },
             animatedVisibilityScope = this@AnimatedContent,
             sharedTransitionScope = this@SharedTransitionLayout,
           )
@@ -87,7 +89,7 @@ private fun FabContainer(
         ContainerState.Fullscreen -> {
           AddContentScreen(
             modifier = Modifier,
-            onBack = { containerState = ContainerState.Fab },
+            onBack = { containerState = ContainerState.Fab; setShowNavBars(true) },
             animatedVisibilityScope = this@AnimatedContent,
             sharedTransitionScope = this@SharedTransitionLayout,
           )
@@ -236,6 +238,6 @@ enum class ContainerState {
 @Composable
 private fun Preview() {
   ContainerTransformTheme {
-    HomeScreen()
+    HomeScreen(setShowNavBars = {})
   }
 }
